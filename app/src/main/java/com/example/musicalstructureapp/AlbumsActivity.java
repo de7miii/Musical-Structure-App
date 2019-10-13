@@ -1,7 +1,6 @@
 package com.example.musicalstructureapp;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.musicalstructureapp.Adapters.CustomAdapter;
+import com.example.musicalstructureapp.Model.Album;
 import com.example.musicalstructureapp.Model.Artist;
 import com.example.musicalstructureapp.Model.Song;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,31 +21,31 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class AlbumsActivity extends AppCompatActivity {
 
     @BindView(R.id.bottom_nav) BottomNavigationView mBottomNav;
-    @BindView(R.id.rv_songs) RecyclerView songsRecyclerView;
+    @BindView(R.id.rv_albums) RecyclerView albumsRecyclerView;
 
-    private ArrayList<Song> mSongs;
+    private ArrayList<Album> mAlbums;
 
     private CustomAdapter mCustomAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_albums);
         ButterKnife.bind(this);
         Menu menu = mBottomNav.getMenu();
-        MenuItem item = menu.getItem(0);
+        MenuItem item = menu.getItem(1);
         item.setChecked(true);
 
         mBottomNav.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
+            switch (menuItem.getItemId()){
                 case R.id.navigation_songs:
+                    Intent albumsIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(albumsIntent);
                     break;
                 case R.id.navigation_albums:
-                    Intent albumsIntent = new Intent(getApplicationContext(), AlbumsActivity.class);
-                    startActivity(albumsIntent);
                     break;
                 case R.id.navigation_playlists:
                     Intent playlistIntent = new Intent(getApplicationContext(), PlaylistActivity.class);
@@ -58,40 +58,38 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                finishAffinity();
-            }
-        });
 
-        mCustomAdapter = new CustomAdapter(this);
         setupData();
-        mCustomAdapter.updateSongsList(mSongs);
+        mCustomAdapter = new CustomAdapter(this);
+        mCustomAdapter.updateAlbumsList(mAlbums);
         mCustomAdapter.notifyDataSetChanged();
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        songsRecyclerView.setLayoutManager(gridLayoutManager);
-        songsRecyclerView.setAdapter(mCustomAdapter);
+        albumsRecyclerView.setLayoutManager(gridLayoutManager);
+        albumsRecyclerView.setAdapter(mCustomAdapter);
     }
 
     private void setupData(){
         Artist artist1 = new Artist("Artist1", "Artist1");
-        Song song = new Song("Song1", artist1, 200000, 2019);
-        Song song2 = new Song("Song2", artist1, 200000, 2018);
-        Song song3 = new Song("Song3", artist1, 200000, 2017);
-        Song song4 = new Song("Song4", artist1, 200000, 2016);
-        Song song5 = new Song("Song5", artist1, 200000, 2015);
-        Song song6 = new Song("Song6", artist1, 200000, 2014);
-        Song song7 = new Song("Song7", artist1, 200000, 2013);
+        Album album = new Album("Album1", artist1, 2019);
+        Album album2 = new Album("Album2", artist1, 2018);
+        Album album3 = new Album("Album3", artist1, 2017);
+        Album album4 = new Album("Album4", artist1, 2016);
+        Album album5 = new Album("Album5", artist1, 2015);
+        Album album6 = new Album("Album6", artist1, 2014);
+        Album album7 = new Album("Album7", artist1, 2013);
+        Album album8 = new Album("Album8", artist1, 2012);
 
-        mSongs = new ArrayList<>();
-        mSongs.add(song);
-        mSongs.add(song2);
-        mSongs.add(song3);
-        mSongs.add(song4);
-        mSongs.add(song5);
-        mSongs.add(song6);
-        mSongs.add(song7);
+
+        mAlbums = new ArrayList<>();
+        mAlbums.add(album);
+        mAlbums.add(album2);
+        mAlbums.add(album3);
+        mAlbums.add(album4);
+        mAlbums.add(album5);
+        mAlbums.add(album6);
+        mAlbums.add(album7);
+        mAlbums.add(album8);
 
     }
 }

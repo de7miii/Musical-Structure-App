@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Musical Structure App</string>
+    <string name="navigation_songs_text">Songs</string>
+    <string name="navigation_albums_text">Albums</string>
+    <string name="navigation_playlist_text">Playlists</string>
+    <string name="navigation_artists_text">Artists</string>
 </resources>
