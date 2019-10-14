@@ -1,7 +1,6 @@
 package com.example.musicalstructureapp;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,14 +20,14 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CustomAdapter.OnItemClickListener {
 
-    @BindView(R.id.bottom_nav) BottomNavigationView mBottomNav;
-    @BindView(R.id.rv_songs) RecyclerView songsRecyclerView;
+    @BindView(R.id.bottom_nav)
+    BottomNavigationView mBottomNav;
+    @BindView(R.id.rv_songs)
+    RecyclerView songsRecyclerView;
 
     private ArrayList<Song> mSongs;
-
-    private CustomAdapter mCustomAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+        //back button exits the app if user is in the starting activity.
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -65,33 +65,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mCustomAdapter = new CustomAdapter(this);
         setupData();
-        mCustomAdapter.updateSongsList(mSongs);
-        mCustomAdapter.notifyDataSetChanged();
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        songsRecyclerView.setLayoutManager(gridLayoutManager);
-        songsRecyclerView.setAdapter(mCustomAdapter);
+        setupRecyclerView();
+
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle("Songs");
     }
 
-    private void setupData(){
-        Artist artist1 = new Artist("Artist1", "Artist1");
-        Song song = new Song("Song1", artist1, 200000, 2019);
-        Song song2 = new Song("Song2", artist1, 200000, 2018);
-        Song song3 = new Song("Song3", artist1, 200000, 2017);
-        Song song4 = new Song("Song4", artist1, 200000, 2016);
-        Song song5 = new Song("Song5", artist1, 200000, 2015);
-        Song song6 = new Song("Song6", artist1, 200000, 2014);
-        Song song7 = new Song("Song7", artist1, 200000, 2013);
+    private void setupRecyclerView() {
+        CustomAdapter customAdapter = new CustomAdapter(this, this);
+        customAdapter.updateSongsList(mSongs);
+        customAdapter.notifyDataSetChanged();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        songsRecyclerView.setLayoutManager(gridLayoutManager);
+        songsRecyclerView.setAdapter(customAdapter);
+    }
+
+    private void setupData() {
+        Artist artist1 = new Artist("Artist 1", "Artist 1");
 
         mSongs = new ArrayList<>();
-        mSongs.add(song);
-        mSongs.add(song2);
-        mSongs.add(song3);
-        mSongs.add(song4);
-        mSongs.add(song5);
-        mSongs.add(song6);
-        mSongs.add(song7);
+        for (int i = 1; i <= 8; i++) {
+            Song song = new Song("Song " + i, artist1, 200000, 2010 + i);
+            mSongs.add(song);
+        }
+    }
 
+    @Override
+    public void onItemClick(int position) {
+        Song currentSong = mSongs.get(position);
+        Intent nowPlayingIntent = new Intent(getApplicationContext(), NowPlayingActivity.class);
+        nowPlayingIntent.putExtra("SONG", currentSong);
+        startActivity(nowPlayingIntent);
     }
 }

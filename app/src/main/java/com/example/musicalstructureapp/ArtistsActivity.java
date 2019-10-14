@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.musicalstructureapp.Adapters.CustomAdapter;
+import com.example.musicalstructureapp.Model.Album;
 import com.example.musicalstructureapp.Model.Artist;
-import com.example.musicalstructureapp.Model.Playlist;
+import com.example.musicalstructureapp.Model.Song;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -20,14 +22,14 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ArtistsActivity extends AppCompatActivity {
+public class ArtistsActivity extends AppCompatActivity implements CustomAdapter.OnItemClickListener {
 
-    @BindView(R.id.bottom_nav) BottomNavigationView mBottomNav;
-    @BindView(R.id.rv_artists) RecyclerView artistsRecyclerView;
+    @BindView(R.id.bottom_nav)
+    BottomNavigationView mBottomNav;
+    @BindView(R.id.rv_artists)
+    RecyclerView artistsRecyclerView;
 
     private ArrayList<Artist> mArtists;
-
-    private CustomAdapter mCustomAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class ArtistsActivity extends AppCompatActivity {
         item.setChecked(true);
 
         mBottomNav.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()){
+            switch (menuItem.getItemId()) {
                 case R.id.navigation_songs:
                     Intent albumsIntent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(albumsIntent);
@@ -59,36 +61,76 @@ public class ArtistsActivity extends AppCompatActivity {
         });
 
         setupData();
-        mCustomAdapter = new CustomAdapter(this);
-        mCustomAdapter.updateArtistsList(mArtists);
-        mCustomAdapter.notifyDataSetChanged();
+        setupRecyclerView();
+
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle("Artists");
+
+        //back button take you to the songs activity directly -starting activity- (the expected behavior when using BottomNavigationView)
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupRecyclerView() {
+        CustomAdapter customAdapter = new CustomAdapter(this, this);
+        customAdapter.updateArtistsList(mArtists);
+        customAdapter.notifyDataSetChanged();
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         artistsRecyclerView.setLayoutManager(gridLayoutManager);
-        artistsRecyclerView.setAdapter(mCustomAdapter);
+        artistsRecyclerView.setAdapter(customAdapter);
     }
-    private void setupData(){
-        Artist artist1 = new Artist("Artist1", "Artist1");
-        Artist artist2 = new Artist("Artist2", "Artist2");
-        Artist artist3 = new Artist("Artist3", "Artist3");
-        Artist artist4 = new Artist("Artist4", "Artist4");
-        Artist artist5 = new Artist("Artist5", "Artist5");
-        Artist artist6 = new Artist("Artist6", "Artist6");
-        Artist artist7 = new Artist("Artist7", "Artist7");
-        Artist artist8 = new Artist("Artist8", "Artist8");
-        Artist artist9 = new Artist("Artist9", "Artist9");
 
+    private void setupData() {
 
         mArtists = new ArrayList<>();
-        mArtists.add(artist1);
-        mArtists.add(artist2);
-        mArtists.add(artist3);
-        mArtists.add(artist4);
-        mArtists.add(artist5);
-        mArtists.add(artist6);
-        mArtists.add(artist7);
-        mArtists.add(artist8);
-        mArtists.add(artist9);
+        for (int i = 1; i <= 8; i++) {
+            Artist artist = new Artist("Artist " + i, "Artist " + i + " Description");
+            Album album = new Album("Album " + i, artist, 2010 + i);
+            album.addSong(new Song("Song " + i, artist, 200000, 2010 + i));
+            album.addSong(new Song("Song " + i + 1, artist, 200000, 2010 + i + 1));
+            album.addSong(new Song("Song " + i + 2, artist, 200000, 2010 + i + 2));
+            album.addSong(new Song("Song " + i + 3, artist, 200000, 2010 + i + 3));
+            album.addSong(new Song("Song " + i + 4, artist, 200000, 2010 + i + 4));
+            album.addSong(new Song("Song " + i + 5, artist, 200000, 2010 + i + 5));
+            album.addSong(new Song("Song " + i + 6, artist, 200000, 2010 + i + 6));
+            artist.addAlbum(album);
+
+            Album album2 = new Album("Album " + i + 1, artist, 2010 + i);
+            album2.addSong(new Song("Song " + i + 1, artist, 200000, 2010 + i));
+            album2.addSong(new Song("Song " + i + 2, artist, 200000, 2010 + i + 1));
+            album2.addSong(new Song("Song " + i + 3, artist, 200000, 2010 + i + 2));
+            album2.addSong(new Song("Song " + i + 4, artist, 200000, 2010 + i + 3));
+            album2.addSong(new Song("Song " + i + 5, artist, 200000, 2010 + i + 4));
+            album2.addSong(new Song("Song " + i + 6, artist, 200000, 2010 + i + 5));
+            album2.addSong(new Song("Song " + i + 7, artist, 200000, 2010 + i + 6));
+            artist.addAlbum(album2);
+
+            Album album3 = new Album("Album " + i + 2, artist, 2010 + i);
+            album2.addSong(new Song("Song " + i + 2, artist, 200000, 2010 + i));
+            album2.addSong(new Song("Song " + i + 3, artist, 200000, 2010 + i + 1));
+            album2.addSong(new Song("Song " + i + 4, artist, 200000, 2010 + i + 2));
+            album2.addSong(new Song("Song " + i + 5, artist, 200000, 2010 + i + 3));
+            album2.addSong(new Song("Song " + i + 6, artist, 200000, 2010 + i + 4));
+            album2.addSong(new Song("Song " + i + 7, artist, 200000, 2010 + i + 5));
+            album2.addSong(new Song("Song " + i + 8, artist, 200000, 2010 + i + 6));
+            artist.addAlbum(album3);
+            mArtists.add(artist);
+        }
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Artist currentArtist = mArtists.get(position);
+
+        Intent albumIntent = new Intent(getApplicationContext(), DetailsActivity.class);
+        albumIntent.putExtra("DATA_TYPE", -3);
+        albumIntent.putExtra("DATA", currentArtist);
+        startActivity(albumIntent);
+    }
 }

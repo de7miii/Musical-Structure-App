@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.musicalstructureapp.Adapters.CustomAdapter;
 import com.example.musicalstructureapp.Model.Album;
 import com.example.musicalstructureapp.Model.Artist;
 import com.example.musicalstructureapp.Model.Playlist;
+import com.example.musicalstructureapp.Model.Song;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -21,14 +23,14 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlaylistActivity extends AppCompatActivity {
+public class PlaylistActivity extends AppCompatActivity implements CustomAdapter.OnItemClickListener {
 
-    @BindView(R.id.bottom_nav) BottomNavigationView mBottomNav;
-    @BindView(R.id.rv_playlists) RecyclerView playlistsRecyclerView;
+    @BindView(R.id.bottom_nav)
+    BottomNavigationView mBottomNav;
+    @BindView(R.id.rv_playlists)
+    RecyclerView playlistsRecyclerView;
 
     private ArrayList<Playlist> mPlaylists;
-
-    private CustomAdapter mCustomAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class PlaylistActivity extends AppCompatActivity {
         item.setChecked(true);
 
         mBottomNav.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()){
+            switch (menuItem.getItemId()) {
                 case R.id.navigation_songs:
                     Intent albumsIntent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(albumsIntent);
@@ -60,36 +62,59 @@ public class PlaylistActivity extends AppCompatActivity {
         });
 
         setupData();
-        mCustomAdapter = new CustomAdapter(this);
-        mCustomAdapter.updatePlaylistsList(mPlaylists);
-        mCustomAdapter.notifyDataSetChanged();
+        setupRecyclerView();
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        playlistsRecyclerView.setLayoutManager(gridLayoutManager);
-        playlistsRecyclerView.setAdapter(mCustomAdapter);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle("Playlists");
+
+        //back button take you to the songs activity directly -starting activity- (the expected behavior when using BottomNavigationView)
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
-    private void setupData(){
-        Artist artist1 = new Artist("Artist1", "Artist1");
-        Playlist playlist = new Playlist("Playlist1", artist1, 2019);
-        Playlist playlist2 = new Playlist("Playlist2", artist1, 2019);
-        Playlist playlist3 = new Playlist("Playlist3", artist1, 2019);
-        Playlist playlist4 = new Playlist("Playlist4", artist1, 2019);
-        Playlist playlist5 = new Playlist("Playlist5", artist1, 2019);
-        Playlist playlist6 = new Playlist("Playlist6", artist1, 2019);
-        Playlist playlist7 = new Playlist("Playlist7", artist1, 2019);
-        Playlist playlist8 = new Playlist("Playlist8", artist1, 2019);
+    private void setupRecyclerView() {
+        CustomAdapter customAdapter = new CustomAdapter(this, this);
+        customAdapter.updatePlaylistsList(mPlaylists);
+        customAdapter.notifyDataSetChanged();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        playlistsRecyclerView.setLayoutManager(gridLayoutManager);
+        playlistsRecyclerView.setAdapter(customAdapter);
+    }
 
+    private void setupData() {
+        Artist artist1 = new Artist("Artist 1", "Artist1");
 
         mPlaylists = new ArrayList<>();
-        mPlaylists.add(playlist);
-        mPlaylists.add(playlist2);
-        mPlaylists.add(playlist3);
-        mPlaylists.add(playlist4);
-        mPlaylists.add(playlist5);
-        mPlaylists.add(playlist6);
-        mPlaylists.add(playlist7);
-        mPlaylists.add(playlist8);
+        for (int i = 1; i <= 8; i++) {
+            Playlist playlist1 = new Playlist("Playliat " + i, artist1, 2010 + i);
+            playlist1.addSong(new Song("Song " + i, artist1, 200000, 2010 + i));
+            playlist1.addSong(new Song("Song " + i + 1, artist1, 200000, 2010 + i));
+            playlist1.addSong(new Song("Song " + i + 2, artist1, 200000, 2010 + i));
+            playlist1.addSong(new Song("Song " + i + 3, artist1, 200000, 2010 + i));
+            playlist1.addSong(new Song("Song " + i + 4, artist1, 200000, 2010 + i));
+            playlist1.addSong(new Song("Song " + i + 5, artist1, 200000, 2010 + i));
+            playlist1.addSong(new Song("Song " + i + 6, artist1, 200000, 2010 + i));
+            mPlaylists.add(playlist1);
+        }
 
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+
+        Playlist currentPlaylist = mPlaylists.get(position);
+
+
+        Intent albumIntent = new Intent(getApplicationContext(), DetailsActivity.class);
+        albumIntent.putExtra("DATA_TYPE", -2);
+        albumIntent.putExtra("DATA", currentPlaylist);
+        startActivity(albumIntent);
     }
 }

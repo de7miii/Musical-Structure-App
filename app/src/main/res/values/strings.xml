@@ -4,4 +4,9 @@
     <string name="navigation_albums_text">Albums</string>
     <string name="navigation_playlist_text">Playlists</string>
     <string name="navigation_artists_text">Artists</string>
+    <string name="play_button_desc">play button arrow symbol</string>
+    <string name="ff_desc">Fast forward double arrows symbol</string>
+    <string name="fr_desc">Fast rewind double arrows symbol</string>
+    <string name="cover_desc">Song cover image</string>
+    <string name="thumbnail_desc">Thumbnail Image</string>
 </resources>

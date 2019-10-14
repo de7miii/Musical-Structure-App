@@ -21,15 +21,20 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
 
-    // TODO: 10/13/2019 setup ItemClickListner to navigate to NowPlaying Activity
 
-    Context mContext;
+    private Context mContext;
     private ArrayList<Song> mSongs;
     private ArrayList<Album> mAlbums;
     private ArrayList<Artist> mArtists;
     private ArrayList<Playlist> mPlaylists;
+    private OnItemClickListener mOnItemClickListener;
 
-    public CustomAdapter(Context context) {
+    public CustomAdapter(Context context, OnItemClickListener onItemClickListener) {
+        mContext = context;
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public CustomAdapter(Context context){
         mContext = context;
     }
 
@@ -42,77 +47,100 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter.CustomViewHolder holder, int position) {
-        if (mSongs != null){
+        if (mSongs != null) {
             holder.bind(mSongs.get(position));
-        }else if (mAlbums != null){
+        } else if (mAlbums != null) {
             holder.bind(mAlbums.get(position));
-        }else if (mArtists != null){
+        } else if (mArtists != null) {
             holder.bind(mArtists.get(position));
-        }else if (mPlaylists != null){
+        } else if (mPlaylists != null) {
             holder.bind(mPlaylists.get(position));
         }
     }
 
     @Override
     public int getItemCount() {
-        return mSongs!= null? mSongs.size(): mAlbums!=null? mAlbums.size(): mArtists!=null? mArtists.size(): mPlaylists!=null? mPlaylists.size() : 0;
+        return mSongs != null ? mSongs.size() : mAlbums != null ? mAlbums.size() : mArtists != null ? mArtists.size() : mPlaylists != null ? mPlaylists.size() : 0;
     }
 
 
-    class CustomViewHolder extends RecyclerView.ViewHolder{
+    class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView thumbnail;
         private TextView songName;
         private TextView artistName;
         private TextView releaseYear;
 
-        public CustomViewHolder(@NonNull View itemView) {
+        CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.img_thumbnail);
             songName = itemView.findViewById(R.id.text_song_name);
             artistName = itemView.findViewById(R.id.text_artist_name);
             releaseYear = itemView.findViewById(R.id.text_release_year);
+            itemView.setOnClickListener(this);
         }
 
-        public void bind(Song song){
+        void bind(Song song) {
             thumbnail.setImageResource(song.getThumbnailId());
             songName.setText(song.getName());
             artistName.setText(song.getArtist().getName());
-            releaseYear.setText(String.format("%d", song.getReleaseYear()));
+            StringBuilder releaseYearText = new StringBuilder();
+            releaseYearText.append("Release Date: ");
+            releaseYearText.append(song.getReleaseYear());
+            releaseYear.setText(releaseYearText);
         }
-        public void bind(Album album){
+
+        void bind(Album album) {
             thumbnail.setImageResource(album.getThumbnailId());
             songName.setText(album.getName());
             artistName.setText(album.getArtist().getName());
-            releaseYear.setText(String.format("%d", album.getReleaseYear()));
+            StringBuilder releaseYearText = new StringBuilder();
+            releaseYearText.append("Release Date: ");
+            releaseYearText.append(album.getReleaseYear());
+            releaseYear.setText(releaseYearText);
         }
-        public void bind(Playlist playlist){
+
+        void bind(Playlist playlist) {
             thumbnail.setImageResource(playlist.getThumbnailId());
             songName.setText(playlist.getName());
             artistName.setText(playlist.getArtist().getName());
-            releaseYear.setText(String.format("%d", playlist.getCreationYear()));
+            StringBuilder creationYearText = new StringBuilder();
+            creationYearText.append("Created: ");
+            creationYearText.append(playlist.getCreationYear());
+            releaseYear.setText(creationYearText);
         }
-        public void bind(Artist artist){
+
+        void bind(Artist artist) {
             thumbnail.setImageResource(artist.getThumbnailId());
             songName.setText(artist.getName());
             artistName.setVisibility(View.GONE);
             releaseYear.setVisibility(View.GONE);
         }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            mOnItemClickListener.onItemClick(position);
+        }
     }
 
-    public  void updateSongsList(ArrayList<Song> songs){
+    public void updateSongsList(ArrayList<Song> songs) {
         mSongs = songs;
     }
 
-    public void updateAlbumsList(ArrayList<Album> albums){
+    public void updateAlbumsList(ArrayList<Album> albums) {
         mAlbums = albums;
     }
 
-    public void updateArtistsList(ArrayList<Artist> artists){
+    public void updateArtistsList(ArrayList<Artist> artists) {
         mArtists = artists;
     }
 
-    public void updatePlaylistsList(ArrayList<Playlist> playlists){
+    public void updatePlaylistsList(ArrayList<Playlist> playlists) {
         mPlaylists = playlists;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

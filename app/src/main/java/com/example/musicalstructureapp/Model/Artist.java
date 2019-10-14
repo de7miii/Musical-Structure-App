@@ -2,10 +2,11 @@ package com.example.musicalstructureapp.Model;
 
 import com.example.musicalstructureapp.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Artist {
+public class Artist implements Serializable {
     private UUID mId;
     private String mName;
     private String mDescription;
@@ -29,7 +30,7 @@ public class Artist {
         mThumbnailId = R.drawable.artist_thumbnail;
     }
 
-    public String getId(){
+    public String getId() {
         return mId.toString();
     }
 
@@ -69,16 +70,12 @@ public class Artist {
         mThumbnailId = thumbnailId;
     }
 
-    public void addAlbum(Album album){
-        if (mAlbums != null){
-            mAlbums.add(album);
-        }else{
-            mAlbums = new ArrayList<>();
-            mAlbums.add(album);
-        }
+    public void addAlbum(Album album) {
+        mAlbums.add(album);
+
     }
 
-    public Album getAlbum(String albumName){
+    private Album getAlbum(String albumName) {
         for (Album album :
                 mAlbums) {
             if (album.getName().equals(albumName)) {
@@ -90,16 +87,16 @@ public class Artist {
         return newAlbum;
     }
 
-    public void addSong(Song song, String albumName){
+    public void addSong(Song song, String albumName) {
         getAlbum(albumName).addSong(song);
     }
 
-    public Song getSong(String songName){
+    public Song getSong(String songName) {
         for (Album album :
                 mAlbums) {
             for (Song song :
                     album.getSongs()) {
-                if (song.getName().equals(songName)){
+                if (song.getName().equals(songName)) {
                     return song;
                 }
             }

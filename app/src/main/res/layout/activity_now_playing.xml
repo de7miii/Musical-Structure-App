@@ -6,4 +6,97 @@
     android:layout_height="match_parent"
     tools:context=".NowPlayingActivity">
 
+    <ImageView
+        android:id="@+id/img_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:foreground="@drawable/bg_gradient"
+        android:contentDescription="@string/cover_desc"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/text_song_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        tools:text="Song Name"
+        style="@style/SongNameTitleStyle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/text_artist_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        tools:text="Artist Name"
+        style="@style/ArtistNameTitleStyle"
+        app:layout_constraintTop_toBottomOf="@id/text_song_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/song_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0"
+        android:background="@android:color/white"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        app:layout_constraintBottom_toTopOf="@id/action_zone"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <LinearLayout
+        android:id="@+id/action_zone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageButton
+            android:id="@+id/btn_fast_rewind"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/ic_fast_rewind"
+            android:contentDescription="@string/fr_desc"/>
+
+        <ImageButton
+            android:id="@+id/btn_play_pause"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/ic_play"
+            android:contentDescription="@string/play_button_desc"/>
+
+        <ImageButton
+            android:id="@+id/btn_fast_forward"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/ic_fast_forward"
+            android:contentDescription="@string/ff_desc"/>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

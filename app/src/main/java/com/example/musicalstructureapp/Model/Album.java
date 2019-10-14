@@ -2,10 +2,11 @@ package com.example.musicalstructureapp.Model;
 
 import com.example.musicalstructureapp.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Album {
+public class Album implements Serializable {
     private UUID mId;
     private String mName;
     private ArrayList<Song> mSongs;
@@ -23,7 +24,7 @@ public class Album {
         mThumbnailId = R.drawable.album_thumbnail;
     }
 
-    public Album() {
+    Album() {
         mId = UUID.randomUUID();
         mSongs = new ArrayList<>();
         mThumbnailId = R.drawable.album_thumbnail;
@@ -81,7 +82,7 @@ public class Album {
         mThumbnailId = thumbnailId;
     }
 
-    public void addSong(Song song){
+    public void addSong(Song song) {
         if (mSongs != null) {
             mSongs.add(song);
             mTotalDuration += song.getDuration();

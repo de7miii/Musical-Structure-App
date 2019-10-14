@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.musicalstructureapp.Adapters.CustomAdapter;
 import com.example.musicalstructureapp.Model.Album;
@@ -21,14 +23,14 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AlbumsActivity extends AppCompatActivity {
+public class AlbumsActivity extends AppCompatActivity implements CustomAdapter.OnItemClickListener {
 
-    @BindView(R.id.bottom_nav) BottomNavigationView mBottomNav;
-    @BindView(R.id.rv_albums) RecyclerView albumsRecyclerView;
+    @BindView(R.id.bottom_nav)
+    BottomNavigationView mBottomNav;
+    @BindView(R.id.rv_albums)
+    RecyclerView albumsRecyclerView;
 
     private ArrayList<Album> mAlbums;
-
-    private CustomAdapter mCustomAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class AlbumsActivity extends AppCompatActivity {
         item.setChecked(true);
 
         mBottomNav.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()){
+            switch (menuItem.getItemId()) {
                 case R.id.navigation_songs:
                     Intent albumsIntent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(albumsIntent);
@@ -60,36 +62,56 @@ public class AlbumsActivity extends AppCompatActivity {
         });
 
         setupData();
-        mCustomAdapter = new CustomAdapter(this);
-        mCustomAdapter.updateAlbumsList(mAlbums);
-        mCustomAdapter.notifyDataSetChanged();
+        setupRecyclerView();
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        albumsRecyclerView.setLayoutManager(gridLayoutManager);
-        albumsRecyclerView.setAdapter(mCustomAdapter);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle("Albums");
+
+        //back button take you to the songs activity directly -starting activity- (the expected behavior when using BottomNavigationView)
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
-    private void setupData(){
-        Artist artist1 = new Artist("Artist1", "Artist1");
-        Album album = new Album("Album1", artist1, 2019);
-        Album album2 = new Album("Album2", artist1, 2018);
-        Album album3 = new Album("Album3", artist1, 2017);
-        Album album4 = new Album("Album4", artist1, 2016);
-        Album album5 = new Album("Album5", artist1, 2015);
-        Album album6 = new Album("Album6", artist1, 2014);
-        Album album7 = new Album("Album7", artist1, 2013);
-        Album album8 = new Album("Album8", artist1, 2012);
+    private void setupRecyclerView() {
+        CustomAdapter customAdapter = new CustomAdapter(this, this);
+        customAdapter.updateAlbumsList(mAlbums);
+        customAdapter.notifyDataSetChanged();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        albumsRecyclerView.setLayoutManager(gridLayoutManager);
+        albumsRecyclerView.setAdapter(customAdapter);
+    }
 
+    private void setupData() {
+        Artist artist1 = new Artist("Artist1", "Artist1");
 
         mAlbums = new ArrayList<>();
-        mAlbums.add(album);
-        mAlbums.add(album2);
-        mAlbums.add(album3);
-        mAlbums.add(album4);
-        mAlbums.add(album5);
-        mAlbums.add(album6);
-        mAlbums.add(album7);
-        mAlbums.add(album8);
+        for (int i = 1; i <= 8; i++) {
+            Album album = new Album("Album " + i, artist1, 2010 + i);
+            album.addSong(new Song("Song " + i, artist1, 200000, 2010 + i));
+            album.addSong(new Song("Song " + i + 1, artist1, 200000, 2010 + i));
+            album.addSong(new Song("Song " + i + 2, artist1, 200000, 2010 + i));
+            album.addSong(new Song("Song " + i + 3, artist1, 200000, 2010 + i));
+            album.addSong(new Song("Song " + i + 4, artist1, 200000, 2010 + i));
+            album.addSong(new Song("Song " + i + 5, artist1, 200000, 2010 + i));
+            album.addSong(new Song("Song " + i + 6, artist1, 200000, 2010 + i));
+            mAlbums.add(album);
+        }
 
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Album currentAlbum = mAlbums.get(position);
+
+        Intent albumIntent = new Intent(getApplicationContext(), DetailsActivity.class);
+        albumIntent.putExtra("DATA_TYPE", -1);
+        albumIntent.putExtra("DATA", currentAlbum);
+        startActivity(albumIntent);
     }
 }

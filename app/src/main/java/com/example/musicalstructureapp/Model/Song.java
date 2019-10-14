@@ -2,9 +2,11 @@ package com.example.musicalstructureapp.Model;
 
 import com.example.musicalstructureapp.R;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Song {
+
+public class Song implements Serializable {
     private UUID mId;
     private String mName;
     private Artist mArtist;
@@ -13,7 +15,7 @@ public class Song {
     private int mThumbnailId;
     private int mReleaseYear;
 
-    public Song(String name,Artist artist, int duration, int releaseYear) {
+    public Song(String name, Artist artist, int duration, int releaseYear) {
         mId = UUID.randomUUID();
         mName = name;
         mArtist = artist;
