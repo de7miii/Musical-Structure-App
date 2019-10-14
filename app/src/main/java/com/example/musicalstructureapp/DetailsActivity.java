@@ -24,12 +24,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        assert getSupportActionBar() != null;
-        getSupportActionBar().hide();
-
-        // change the status bar to transparent color to
-        Window w = getWindow();
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int dataType = getIntent().getIntExtra("DATA_TYPE", 0);
 
@@ -74,7 +69,6 @@ public class DetailsActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(customAdapter);
-
     }
 
     public void handlePlaylist() {

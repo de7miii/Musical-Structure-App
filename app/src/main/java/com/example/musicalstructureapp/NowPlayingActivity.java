@@ -47,14 +47,7 @@ public class NowPlayingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_now_playing);
         ButterKnife.bind(this);
 
-        // change the status bar to transparent color to
-        Window w = getWindow();
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-        // hide the action bar from the layout
-        assert getSupportActionBar() != null;
-        getSupportActionBar().hide();
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Song song = (Song) getIntent().getSerializableExtra("SONG");
 

@@ -64,9 +64,6 @@ public class AlbumsActivity extends AppCompatActivity implements CustomAdapter.O
         setupData();
         setupRecyclerView();
 
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("Albums");
-
         //back button take you to the songs activity directly -starting activity- (the expected behavior when using BottomNavigationView)
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override

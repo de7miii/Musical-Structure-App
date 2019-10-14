@@ -9,4 +9,9 @@
     <string name="fr_desc">Fast rewind double arrows symbol</string>
     <string name="cover_desc">Song cover image</string>
     <string name="thumbnail_desc">Thumbnail Image</string>
+    <string name="now_playing_label">Now Playing</string>
+    <string name="artist_label">Artists</string>
+    <string name="details_label">Details</string>
+    <string name="playlist_label">Playlists</string>
+    <string name="album_label">Albums</string>
 </resources>

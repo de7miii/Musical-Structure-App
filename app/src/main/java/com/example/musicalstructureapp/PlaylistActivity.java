@@ -107,10 +107,7 @@ public class PlaylistActivity extends AppCompatActivity implements CustomAdapter
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
-
         Playlist currentPlaylist = mPlaylists.get(position);
-
 
         Intent albumIntent = new Intent(getApplicationContext(), DetailsActivity.class);
         albumIntent.putExtra("DATA_TYPE", -2);

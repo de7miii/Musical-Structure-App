@@ -63,9 +63,6 @@ public class ArtistsActivity extends AppCompatActivity implements CustomAdapter.
         setupData();
         setupRecyclerView();
 
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("Artists");
-
         //back button take you to the songs activity directly -starting activity- (the expected behavior when using BottomNavigationView)
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
@@ -112,13 +109,13 @@ public class ArtistsActivity extends AppCompatActivity implements CustomAdapter.
             artist.addAlbum(album2);
 
             Album album3 = new Album("Album " + i + 2, artist, 2010 + i);
-            album2.addSong(new Song("Song " + i + 2, artist, 200000, 2010 + i));
-            album2.addSong(new Song("Song " + i + 3, artist, 200000, 2010 + i + 1));
-            album2.addSong(new Song("Song " + i + 4, artist, 200000, 2010 + i + 2));
-            album2.addSong(new Song("Song " + i + 5, artist, 200000, 2010 + i + 3));
-            album2.addSong(new Song("Song " + i + 6, artist, 200000, 2010 + i + 4));
-            album2.addSong(new Song("Song " + i + 7, artist, 200000, 2010 + i + 5));
-            album2.addSong(new Song("Song " + i + 8, artist, 200000, 2010 + i + 6));
+            album3.addSong(new Song("Song " + i + 2, artist, 200000, 2010 + i));
+            album3.addSong(new Song("Song " + i + 3, artist, 200000, 2010 + i + 1));
+            album3.addSong(new Song("Song " + i + 4, artist, 200000, 2010 + i + 2));
+            album3.addSong(new Song("Song " + i + 5, artist, 200000, 2010 + i + 3));
+            album3.addSong(new Song("Song " + i + 6, artist, 200000, 2010 + i + 4));
+            album3.addSong(new Song("Song " + i + 7, artist, 200000, 2010 + i + 5));
+            album3.addSong(new Song("Song " + i + 8, artist, 200000, 2010 + i + 6));
             artist.addAlbum(album3);
             mArtists.add(artist);
         }
